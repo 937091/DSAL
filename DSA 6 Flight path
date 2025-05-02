@@ -1,0 +1,77 @@
+#include<iostream>
+using namespace std;
+class Matrix {
+public:
+int n, M[30][30];
+int visited[30];
+int count;
+void read() {
+int p, c, c1, t;
+cout << "\nEnter the number of ci􀆟es: ";
+cin >> n;
+for (int i = 0; i < n; i++)
+{
+visited[i] = 0;
+for (int j = 0; j < n; j++)
+{
+M[i][j] = 0;
+}
+}
+cout << "\nEnter the number of flights: ";
+cin >> p;
+for (int i = 0; i < p; i++) {
+cout << "\nEnter source city (0 to " << n - 1 << "): ";
+cin >> c;
+cout << "Enter des􀆟na􀆟on city (0 to " << n - 1 << "): ";
+cin >> c1;
+cout << "Enter 􀆟me required: ";
+cin >> t;
+if (c >= 0 && c < n && c1 >= 0 && c1 < n)
+{
+M[c][c1] = M[c1][c] = t;
+} else {
+cout << "Invalid city index! Try again.\n";
+i--;
+}
+}
+}
+void display()
+{
+cout << "\nAdjacency Matrix:\n";
+for (int i = 0; i < n; i++) {
+for (int j = 0; j < n; j++)
+{
+cout << M[i][j] << "\t";
+}
+cout << endl;
+}
+}
+void DFS(int u)
+{
+for (int v = 0; v < n; v++)
+{
+if (visited[v] == 0 && M[u][v] != 0)
+{
+visited[v] = 1;
+count++;
+DFS(v);
+}
+}
+}
+};
+int main()
+{
+Matrix m;
+m.read();
+m.display();
+m.count = 1;
+m.visited[0] = 1;
+m.DFS(0);
+if (m.count == m.n)
+{
+cout << "\nGraph is connected.\n";
+} else {
+cout << "\nGraph is disconnected.\n";
+}
+return 0;
+}
