@@ -1,0 +1,103 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+struct node
+{
+char data;
+node* l = NULL;
+node* r = NULL;
+};
+class tree
+{
+public:
+int i;
+int n;
+char* arr;
+node* root;
+tree()
+{
+root = NULL;
+}
+void create()
+{
+cout << "Enter the number of expressions: ";
+cin >> n;
+arr = new char[n];
+cout << "Enter the data of the prefix expression: ";
+for(i = 0; i < n; i++)
+{
+cin >> arr[i];
+}
+stack<node*> stk;
+for (i = n - 1; i >= 0; i--)
+{
+char ch = arr[i];
+node* newNode = new node();
+newNode->data = ch;
+if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+{
+newNode->l = stk.top(); stk.pop();
+newNode->r = stk.top(); stk.pop();
+}
+stk.push(newNode);
+}
+root = stk.top();
+}
+void postorder_non_recursive(node* root)
+{
+if (root == NULL) return;
+stack<node*> s1, s2;
+s1.push(root);
+while (!s1.empty())
+{
+node* curr = s1.top();
+s1.pop();
+s2.push(curr);
+if (curr->l != NULL)
+{
+s1.push(curr->l);
+}
+if (curr->r != NULL)
+{
+s1.push(curr->r);
+}
+}
+while (!s2.empty())
+{
+cout << s2.top()->data << " ";
+s2.pop();
+}
+}
+void display() {
+cout << "Prefix Expression: ";
+for(i = 0; i < n; i++)
+{
+cout << arr[i];
+}
+cout << endl;
+cout << "Post-order Traversal (Non-Recursive): ";
+postorder_non_recursive(root);
+cout << endl;
+}
+void deleteTree(node* root)
+{
+if (root == NULL) return;
+deleteTree(root->l);
+deleteTree(root->r);
+delete root;
+}
+void deleteALL()
+{
+deleteTree(root);
+root = NULL;
+cout << "Tree deleted successfully." << endl;
+}
+};
+int main()
+{
+tree t;
+t.create();
+t.display();
+t.deleteALL();
+return 0;
+}
