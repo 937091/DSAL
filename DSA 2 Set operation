@@ -1,0 +1,253 @@
+#include<iostream>
+using namespace std;
+class set
+{
+public:
+int A[20],B[20],C[30];
+int a,b;
+void read()
+{
+cout<<"\nEnter how many elements you want to add in the first set:";
+cin>>a;
+cout<<"\nEnter how many elements you want to add in the second set:";
+cin>>b;
+cout<<"\nEnter the elements of the first set:";
+for (int i=0;i<a;i++)
+{
+cin>>A[i];
+}
+cout<<"\nEnter the elements of the second set:";
+for(int i=0;i<b;i++)
+{
+cin>>B[i];
+}
+}
+void display()
+{
+cout<<"\nElements of the first set are:";
+for (int i=0;i<a;i++)
+{
+cout<<A[i]<<" ";
+}
+cout<<endl;
+cout<<"\nElements of the second set are:";
+for(int i=0;i<b;i++)
+{
+cout<<B[i]<<" ";
+}
+cout<<endl;
+}
+void add()
+{
+int d;
+cout<<"\nEnter the element to add to the first set:";
+cin>>d;
+bool found=false;
+for (int i=0;i<a;i++)
+{
+if(A[i]==d)
+{
+found=true;
+break;
+}
+}
+if (found)
+{
+cout<<"\nCan't add the element as it already exists."<<endl;
+}
+else
+{
+A[a]=d;
+cout<<"\nElement added successfully."<<endl;
+a++;
+}
+}
+void remove()
+{
+int d;
+cout <<"\nEnter the element to remove from the first set:";
+cin>>d;
+int g = -1;
+for (int i=0;i<a;i++)
+{
+if (A[i]==d)
+{
+g = i;
+break;
+}
+}
+if (g==-1)
+{
+cout<<"\nElement not found"<< endl;
+}
+else
+{
+for (int i=g;i<a-1;i++)
+{
+A[i]=A[i+1];
+}
+a--;
+cout<<"\nElement removed successfully."<< endl;
+}
+}
+void search()
+{
+int key;
+cout<<"\nEnter the number to search:";
+cin>>key;
+bool found=false;
+for (int i=0;i<a; i++)
+{
+if (A[i]==key)
+{
+found=true;
+break;
+}
+}
+if (found)
+{
+cout<<"\nTRUE (element found)"<<endl;
+}
+else
+{
+cout<<"\nFALSE (element not found)"<<endl;
+}
+}
+void intersection()
+{
+int k=0;
+bool found;
+for (int i=0;i<a;i++)
+{
+found=false;
+for (int j=0;j<b;j++)
+{
+if (A[i]==B[j])
+{
+C[k++]=A[i];
+found=true;
+break;
+}
+}
+}
+if (k==0)
+{
+cout<<"\n No common elements present"<<endl;
+}
+else
+{
+cout<<"\n Common elements are:";
+for (int i=0;i<k;i++)
+{
+cout<<C[i]<<" ";
+}
+cout<<endl;
+}
+}
+void union1()
+{
+int k=0;
+for (int i=0;i<a;i++)
+{
+C[k++]=A[i];
+}
+for (int i=0;i<b;i++)
+{
+bool flag=false;
+for (int j=0;j<k;j++)
+{
+if (B[i]==C[j])
+{
+flag=true;
+break;
+}
+}
+if (!flag)
+{
+C[k++] = B[i];
+}
+}
+cout<<"\n Union:";
+for (int i=0;i<k;i++)
+{
+cout<<C[i]<<" ";
+}
+cout<<endl;
+}
+void diff()
+{
+int k=0;
+for (int i=0;i<a;i++)
+{
+bool flag=false;
+for (int j=0;j<b;j++)
+{
+if (A[i]==B[j])
+{
+flag=true;
+break;
+}
+}
+if (!flag)
+{
+C[k++]=A[i];
+}
+}
+cout<<"\n Difference:";
+for (int i=0;i<k;i++)
+{
+cout<<C[i]<<" ";
+}
+cout<<endl;
+}
+void subset()
+{
+bool isSubset=true;
+for (int i=0;i<a;i++)
+{
+bool found=false;
+for (int j=0;j<b;j++)
+{
+if (A[i]==B[j])
+{
+found=true;
+break;
+}
+}
+if (!found)
+{
+isSubset=false;
+break;
+}
+}
+if (isSubset)
+{
+cout<<"\n A is a subset of B"<<endl;
+}
+else
+{
+cout<<"\n A is not a subset of B"<<endl;
+}
+}
+};
+int main()
+{
+set a;
+cout<<"\n Read the elements:";
+a.read();
+cout<<"\n Display the elements:";
+a.display();
+cout<<"\n Adding the element:";
+a.add();
+a.display();
+cout<<"\n Removing the element:";
+a.remove();
+a.display();
+cout<<"\n Searching the element:";
+a.search();
+a.intersection();
+a.union1();
+a.diff();
+a.subset();
+return 0;
+}
