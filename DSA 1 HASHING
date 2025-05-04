@@ -1,0 +1,124 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct person {
+    string name;
+    int tele;
+};
+
+class data {
+    person D[10], hashtable[10], hashtable1[10];
+    int n;
+
+public:
+    void read() {
+        cout << "\nEnter how many persons: ";
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            cout << "\nEnter name: ";
+            cin >> D[i].name;
+            cout << "Enter telephone no.: ";
+            cin >> D[i].tele;
+        }
+        for (int i = 0; i < 10; i++) {
+            hashtable[i].name = "NONE";
+            hashtable[i].tele = 0;
+            hashtable1[i].name = "NONE";
+            hashtable1[i].tele = 0;
+        }
+    }
+
+    void asciivalue() {
+        int c1 = 0, c2 = 0;
+
+        for (int i = 0; i < n; i++) {
+            string a = D[i].name;
+            int sum = 0;
+
+            for (int j = 0; j < a.length(); j++) {
+                cout << a[j] << "=" << int(a[j]) << endl;
+                sum += int(a[j]);
+            }
+
+            cout << "Sum = " << sum << endl;
+
+            int h = sum % 10;
+            int hash = sum % 10;
+
+            // Quadratic probing
+            int v = 1;
+            while (hashtable[h].name != "NONE") {
+                c1++;
+                cout << "Quadratic probing collision\n";
+                h = (h + v * v) % 10;
+                v++;
+            }
+            hashtable[h] = D[i];
+
+            // Linear probing
+            while (hashtable1[hash].name != "NONE") {
+                c2++;
+                cout << "Linear probing collision\n";
+                hash = (hash + 1) % 10;
+            }
+            hashtable1[hash] = D[i];
+        }
+
+        cout << "\nQuadratic Probing:";
+        cout << "\nNo. of collisions: " << c1 << endl;
+        cout << "NAME\t\tTELEPHONE NO." << endl;
+        for (int i = 0; i < 10; i++) {
+            cout << hashtable[i].name << "\t\t" << hashtable[i].tele << endl;
+        }
+
+        cout << "\nLinear Probing:";
+        cout << "\nNo. of collisions: " << c2 << endl;
+        cout << "NAME\t\tTELEPHONE NO." << endl;
+        for (int i = 0; i < 10; i++) {
+            cout << hashtable1[i].name << "\t\t" << hashtable1[i].tele << endl;
+        }
+    }
+
+    void search() {
+        int key;
+        cout << "\nEnter the telephone number to search: ";
+        cin >> key;
+
+        int i = 0, j = 0;
+        bool found = false;
+
+        while (i < 10) {
+            if (hashtable[i].tele == key) {
+                found = true;
+                break;
+            }
+            i++;
+        }
+        if (found)
+            cout << "Quadratic probing: found after " << i + 1 << " comparisons.\n";
+        else
+            cout << "Quadratic probing: key not found.\n";
+
+        found = false;
+        while (j < 10) {
+            if (hashtable1[j].tele == key) {
+                found = true;
+                break;
+            }
+            j++;
+        }
+        if (found)
+            cout << "Linear probing: found after " << j + 1 << " comparisons.\n";
+        else
+            cout << "Linear probing: key not found.\n";
+    }
+};
+
+int main() {
+    data A;
+    A.read();
+    A.asciivalue();
+    A.search();
+    return 0;
+}
