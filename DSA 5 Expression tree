@@ -1,103 +1,117 @@
-#include<iostream>
-#include<stack>
-using namespace std;
-struct node
-{
-char data;
-node* l = NULL;
-node* r = NULL;
-};
-class tree
-{
-public:
-int i;
-int n;
-char* arr;
-node* root;
-tree()
-{
-root = NULL;
-}
-void create()
-{
-cout << "Enter the number of expressions: ";
-cin >> n;
-arr = new char[n];
-cout << "Enter the data of the prefix expression: ";
-for(i = 0; i < n; i++)
-{
-cin >> arr[i];
-}
-stack<node*> stk;
-for (i = n - 1; i >= 0; i--)
-{
-char ch = arr[i];
-node* newNode = new node();
-newNode->data = ch;
-if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
-{
-newNode->l = stk.top(); stk.pop();
-newNode->r = stk.top(); stk.pop();
-}
-stk.push(newNode);
-}
-root = stk.top();
-}
-void postorder_non_recursive(node* root)
-{
-if (root == NULL) return;
-stack<node*> s1, s2;
-s1.push(root);
-while (!s1.empty())
-{
-node* curr = s1.top();
-s1.pop();
-s2.push(curr);
-if (curr->l != NULL)
-{
-s1.push(curr->l);
-}
-if (curr->r != NULL)
-{
-s1.push(curr->r);
-}
-}
-while (!s2.empty())
-{
-cout << s2.top()->data << " ";
-s2.pop();
-}
-}
-void display() {
-cout << "Prefix Expression: ";
-for(i = 0; i < n; i++)
-{
-cout << arr[i];
-}
-cout << endl;
-cout << "Post-order Traversal (Non-Recursive): ";
-postorder_non_recursive(root);
-cout << endl;
-}
-void deleteTree(node* root)
-{
-if (root == NULL) return;
-deleteTree(root->l);
-deleteTree(root->r);
-delete root;
-}
-void deleteALL()
-{
-deleteTree(root);
-root = NULL;
-cout << "Tree deleted successfully." << endl;
-}
-};
-int main()
-{
-tree t;
-t.create();
-t.display();
-t.deleteALL();
-return 0;
+#include <stack> 
+#include <iostream> 
+#include <string> 
+using namespace std; 
+struct node 
+{ 
+    char data; 
+    node *l, *r; 
+}; 
+ 
+class TREE 
+{ 
+public: 
+    node *nnode, *root, *curr; 
+    stack<node *> s, s1; 
+    string exp; 
+    int n; 
+    TREE() 
+ { 
+        root = NULL; 
+    } 
+ 
+    void create()  
+ { 
+        cout << "\nEnter the expression: "; 
+        cin >> exp; 
+        n = exp.length(); 
+        for (int i = n - 1; i >= 0; i--) 
+  {  
+            char ch = exp[i];  
+            nnode = new node; 
+            nnode->l = nnode->r = NULL; 
+            nnode->data = ch; 
+            if (ch >= 'a' && ch <= 'z')  
+   { 
+                s.push(nnode); 
+            } else  
+   { 
+    if(s.size()<2) 
+    { 
+     cout<<"\n Invalid expression"; 
+    } 
+    else 
+                nnode->l = s.top(); 
+                s.pop(); 
+                nnode->r = s.top(); 
+                s.pop(); 
+                s.push(nnode); 
+            } 
+        } 
+        if (!s.empty()) 
+  { 
+            root = s.top(); 
+            s.pop(); 
+        } 
+  else 
+  { 
+            root = NULL; 
+        } 
+    } 
+ 
+    void display(node *temp)  
+ { 
+        if (temp != NULL) 
+  { 
+            display(temp->l);  
+            display(temp->r); 
+            cout << temp->data << " "; 
+        } 
+    } 
+ 
+    void postorder(node *temp) 
+ { 
+        s.push(temp); 
+        while (!s.empty())  
+  { 
+            curr = s.top(); 
+            s.pop(); 
+            s1.push(curr); 
+            if (curr->l != NULL) 
+   { 
+                s.push(curr->l); 
+            } 
+            if (curr->r != NULL) 
+   { 
+                s.push(curr->r); 
+            } 
+        } 
+        while (!s1.empty())  
+  { 
+            curr = s1.top(); 
+            s1.pop(); 
+            cout << curr->data << " "; 
+        } 
+    } 
+ 
+    void deletet(node *temp)  
+ { 
+        if (temp != NULL) 
+  { 
+            deletet(temp->l); 
+            deletet(temp->r); 
+            delete temp; 
+        } 
+    } 
+}; 
+ 
+int main() { 
+    TREE ob; 
+    ob.create(); 
+    cout << "\n Postorder traversal: "; 
+    ob.postorder(ob.root); 
+    cout << "\n Deleting tree..."; 
+    ob.deletet(ob.root); 
+    cout << "\n Tree deleted successfully"; 
+    return 0; 
 }
